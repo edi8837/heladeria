@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+     >
+    <h:head>
+        <title>Productos</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>   
+        
+        
+
+
+    </h:head>
+
+    <h:body>
+
+        <h3>Produtos</h3>
+                    <h:form>
+                        <h:outputText value="No existen producto en la base de datos!" rendered="#{empty listadoProductos}"/>
+                        <h:dataTable value="#{listarProductos}" var="prod" rendered="#{not empty listadoProductos}"
+                                      headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar">
+
+                            <h:column>
+                                <f:facet name="header">Id</f:facet>
+                                    #{prod.id}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header"> Nombre </f:facet>
+                                <h:outputText value="#{prod.nombre}"  />
+                            </h:column>
+                            
+                            <h:column>
+                                <f:facet name="header"> Stock </f:facet>
+                                <h:outputText value="#{prod.stock}"  />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header"> Precio </f:facet>
+                                <h:outputText value="#{prod.precio}"  />
+                            </h:column>
+                            
+
+
+                            <h:column>
+                                <f:facet name="header"> Editar </f:facet>
+                                <h:commandLink value="Editar" action="#{productoBeans.editar(prod.id)}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header"> Action </f:facet>
+
+                                <h:commandLink value="Eliminar" action="#{productoBeans.eliminar(prod.id)}" />
+                            </h:column>
+                        </h:dataTable>
+
+
+
+                        <div class="row justify-content-center mt-md-5">
+                            <div class="col col-md-3">
+                                <h:commandButton class="btn btn-outline-info" value="Añadir" action="formProducto.xhtml" />
+                            </div>
+                        </div>
+                    </h:form>                    
+            
+         
+
+
+       
+    </h:body>
+</html>

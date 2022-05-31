@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+
+      >
+    <h:head>
+        <meta charset="UTF-8"/>
+        <title>Formulario Producto</title>
+
+    </h:head>
+    <h:body>
+
+
+
+
+
+        <h3>Formulario Producto</h3>
+
+
+        <h:panelGrid border="1">
+            <h:link outcome="productoCRUD.xhtml" value="volver"/>
+            <h:form>
+                <h:panelGrid columns="2">
+
+
+                    <h:outputLabel value="nombre" for="nombre"/>
+                    <h:inputText id="nombre" value="#{productoBeans.producto.nombre}"/>
+
+
+                    <h:outputLabel value="stock" for="stock"/>
+                    <h:inputText id="stock" value="#{productoBeans.producto.stock}"/>
+
+
+
+                    <h:outputLabel value="precio" for="precio"/>
+                    <h:inputText id="precio" value="#{productoBeans.producto.precio}"/>
+
+                    
+
+
+                    <h:commandButton value="Guardar" action="#{productoBeans.guardar}"/>
+                    <h:inputHidden value="#{productoBeans.producto.id}"/>
+                </h:panelGrid>
+            </h:form>
+
+        </h:panelGrid>
+
+    </h:body>
+</html>
