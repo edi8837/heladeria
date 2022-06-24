@@ -1,18 +1,18 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package ec.edu.ups.beans;
 
-import ec.edu.ups.entidades.Producto;
 
+
+import ec.edu.ups.entidades.Bodega;
+import ec.edu.ups.entidades.Producto;
+import ec.edu.ups.facade.BodegaFacade;
 import ec.edu.ups.facade.ProductoFacade;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJB;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
-import jakarta.enterprise.inject.Model;
-import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,71 +20,136 @@ import java.util.List;
 
 /**
  *
- * @author Elvis
+ * @author edwin
  */
-@Model
+@Named
+@SessionScoped
 public class ProductoBeans implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @EJB
-    private ProductoFacade producFacade;
-    private Producto producto1;
-    private Long id;
+    private ProductoFacade productoFacade;
+    @EJB
+    private BodegaFacade bodegaFacade;
 
-  
+    private List<Producto> listp = new ArrayList<>();
+    private List<Bodega> listb = new ArrayList<>();
+    private Bodega bodega;
+    private int id;
+    private String nombre;
+    private int stock;
+    private double precio;
+
     @PostConstruct
     public void init() {
-        this.producto1 = new Producto();
+        this.bodega = new Bodega();
+        listp = productoFacade.findAll();
+        listb = bodegaFacade.findAll();
     }
 
-    
-    public Producto getProducto() {
-        return producto1;
+    public ProductoFacade getProductoFacade() {
+        return productoFacade;
     }
 
-    public void setProducto(Producto producto) {
-        this.producto1 = producto;
+    public void setProductoFacade(ProductoFacade productoFacade) {
+        this.productoFacade = productoFacade;
     }
 
-    public Long getId() {
+    public List<Producto> getListp() {
+        return listp;
+    }
+
+    public void setListp(List<Producto> listp) {
+        this.listp = listp;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
-    }
-    
-   
-  
-    @Produces
-    @RequestScoped
-    @Named("listadoProductos")
-    public List<Producto> listarProductos() {
-        List<Producto> prod = producFacade.listar();
-        return prod;
     }
 
-     public String guardar(){
-        try {
-            this.producFacade.guardar(producto1);
-            producto1 = new Producto();
-        } catch (Exception e) {
-        }
-        return "productoCRUD.xhtml?faces-redirect=true";
+    public String getNombre() {
+        return nombre;
     }
-    
-    public String eliminar(Long id){
-        producFacade.eliminar(id);
-        return "productoCRUD.xhtml?faces-redirect=true";
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
-    
-    public String editar(Long id){
-        this.id = id;
-        
-        if (id != null && id > 0) {
-            producFacade.opcional(id).ifPresent(p -> {
-                this.producto1 = p;
-            });
-        }
-        return "formProducto.xhtml";
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    public BodegaFacade getBodegaFacade() {
+        return bodegaFacade;
+    }
+
+    public void setBodegaFacade(BodegaFacade bodegaFacade) {
+        this.bodegaFacade = bodegaFacade;
+    }
+
+    public Bodega getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(Bodega bodega) {
+        this.bodega = bodega;
+    }
+
+    public List<Bodega> getListb() {
+        return listb;
+    }
+
+    public void setListb(List<Bodega> listb) {
+        this.listb = listb;
+    }
+
+    public String add() {
+        Producto p = new Producto(id, nombre, stock, precio);
+        productoFacade.create(p);
+        listp = productoFacade.findAll();
+        this.limpiar();
+        return "producto.xhtml?faces-redirect=true";
+    }
+
+    public void limpiar() {
+
+        this.nombre = "";
+        this.stock = 0;
+        this.precio = 0;
+
+    }
+
+    public String edit(Producto s) {
+        productoFacade.edit(s);
+
+        listp = productoFacade.findAll();
+        return "producto.xhtml?faces-redirect=true";
+    }
+
+    public String delete(Producto s) {
+        productoFacade.remove(s);
+        listp = productoFacade.findAll();
+        return "producto.xhtml?faces-redirect=true";
+    }
+
+    public double sumar(Producto p) {
+        double i = p.getPrecio() * p.getStock();
+        return i;
     }
 }

@@ -5,65 +5,50 @@
 package ec.edu.ups.entidades;
 
 import jakarta.persistence.CascadeType;
+import java.io.Serializable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.NamedQuery;
-import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  *
- * @author Edisson
+ * @author edwin
  */
 @Entity
-@NamedQuery(name = "getBodega", query = "SELECT b FROM  Bodega b")
 public class Bodega implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private int id;
     private String nombre;
-    private String Cuidad;
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "bodega")
+    private String ciudad;
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinColumn
     private Collection<Producto> productos;
 
-    
-    public Bodega() {
-    }
-    
-    public Bodega(long codigo, String nombre, String Cuidad) {
-        this.id = id;
-        this.nombre = nombre;
-        this.Cuidad = Cuidad;
-    }
-
-    public long getCodigo() {
+    public int getId() {
         return id;
     }
 
-    public void setCodigo(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public Bodega() {
+        productos = new HashSet<Producto>();
     }
 
-    public void setNombre(String nombre) {
+    public Bodega(int id, String nombre, String ciudad) {
+        this.id = id;
         this.nombre = nombre;
-    }
-
-    public String getCuidad() {
-        return Cuidad;
-    }
-
-    public void setCuidad(String Cuidad) {
-        this.Cuidad = Cuidad;
+        this.ciudad = ciudad;
+        productos = new HashSet<Producto>();
     }
 
     public Collection<Producto> getProductos() {
@@ -74,11 +59,53 @@ public class Bodega implements Serializable {
         this.productos = productos;
     }
 
-    @Override
-    public String toString() {
-        return "Bodega{" + "id=" + id + ", nombre=" + nombre + ", Cuidad=" + Cuidad + '}';
+    public void addProducto(Producto producto) {
+        this.productos.add(producto);
     }
 
-    
-        
+    public void removeProducto(Producto producto) {
+        this.productos.remove(producto);
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (int) id;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Bodega)) {
+            return false;
+        }
+        Bodega other = (Bodega) object;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Bodega{" + "id=" + id + ", nombre=" + nombre + ", ciudad=" + ciudad + '}';
+    }
+
 }

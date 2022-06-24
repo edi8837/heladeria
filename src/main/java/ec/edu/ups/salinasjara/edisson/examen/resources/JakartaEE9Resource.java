@@ -2,6 +2,7 @@ package ec.edu.ups.salinasjara.edisson.examen.resources;
 
 import ec.edu.ups.entidades.Bodega;
 import ec.edu.ups.facade.BodegaFacade;
+import ec.edu.ups.facade.ProductoFacade;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -13,8 +14,10 @@ import jakarta.ws.rs.core.Response;
  */
 @Path("jakartaee9")
 public class JakartaEE9Resource {
-
+@EJB
+    private ProductoFacade producto;
     @EJB
+    
     private BodegaFacade ejbBodega;
 
     @GET
